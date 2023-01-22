@@ -74,17 +74,16 @@ app.post("/register", async (req, res) => {
 
 app.get('/users', userDb.getUsers)
 app.get('/users/:id', userDb.getUserById)
-//app.post('/users/register', userDb.registerUser);
 app.post('/users', userDb.createUser)
 app.put('/users/:id', userDb.updateUser)
 app.delete('/users/:id', userDb.deleteUser)
 
-app.get('/product', productDb.getProduct)
-app.get('/product/:id', productDb.getProductById)
-app.get('/product/:id/quantity', productDb.getProductInventory);
-app.post('/product', productDb.createProduct)
-app.put('/product/:id', productDb.updateProduct)
-app.delete('/product/:id', productDb.deleteProduct)
+app.get('/products', productDb.getProducts)
+app.get('/products/:id', productDb.getProductById)
+app.get('/products/:id/quantity', productDb.getProductInventory);
+app.post('/products', productDb.createProduct)
+app.put('/products/:id', productDb.updateProduct)
+app.delete('/products/:id', productDb.deleteProduct)
 
 app.get('/cart', cartDb.getCartItems)
 app.get('/cart/:id', cartDb.getCartItemById)
@@ -93,14 +92,13 @@ app.get('/cart/:id/session', cartDb.getSessionById)
 app.post('/cart', cartDb.createCartItem)
 app.post('/cart/:id/session', cartDb.createSession)
 app.put('/cart/:id', cartDb.updateCartItem)
-app.put('/cart/:id/session', cartDb.updateSession)
 app.delete('/cart/:id', cartDb.deleteCartItem)
 app.delete('/cart/:id/session', cartDb.deleteSession)
 
 app.get('/checkout/addresses', checkoutDb.getUserAddresses)
-app.get('/checkout/address/:id', checkoutDb.getUserAddressById)
+app.get('/checkout/addresses/:id', checkoutDb.getUserAddressById)
 app.get('/checkout/payments', checkoutDb.getUserPayments)
-app.get('/checkout/payment/:id', checkoutDb.getUserPaymentById)
+app.get('/checkout/payments/:id', checkoutDb.getUserPaymentById)
 app.post('/checkout/addresses', checkoutDb.createUserAddress)
 app.post('/checkout/payments', checkoutDb.createUserPayment)
 app.put('/checkout/addresses/:id', checkoutDb.updateUserAddress)

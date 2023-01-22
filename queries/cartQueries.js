@@ -50,6 +50,7 @@ const getTotal = (request, response) => {
   })
 }
 
+//when linked to a client, remember to send session_id and product_id
 const createCartItem = (request, response) => {
   const { session_id, product_id, quantity } = request.body
 
@@ -73,14 +74,16 @@ const createSession = (request, response) => {
   })
 }
 
+
+//make sure to carry all elements w/ modification to stop accidentally modifying unexpected elements
 const updateCartItem = (request, response) => {
   const id = parseInt(request.params.id)
   const { session_id, product_id, quantity } = request.body
 
   pool.query(
     //might have to retrive a global session_id
-      'UPDATE users SET session_id = $1, product_id = $2, quantity = $3 WHERE id = $4',
-      [session_id, product_id, quantity],
+      'UPDATE cart_item SET session_id = $1, product_id = $2, quantity = $3 WHERE id = $4',
+      [session_id, product_id, quantity, id],
       (error, results) => {
         if (error) {
           throw error
@@ -89,24 +92,6 @@ const updateCartItem = (request, response) => {
       }
     )
   }
-
-const updateSession = (request, response) => {
-  //update before it expires?
-  const id = parseInt(request.params.id)
-  const { user_id, total } = request.body
-
-  pool.query(
-    //might have to retrive a global session_id
-      'UPDATE users SET user_id = $1, total = $2 WHERE id = $3',
-      [user_id, total],
-      (error, results) => {
-        if (error) {
-          throw error
-        }
-        response.status(200).send(`Updated Session modified with ID: ${id}`)
-      }
-    )
-}
 
 const deleteCartItem = (request, response) => {
     const id = parseInt(request.params.id)
@@ -121,6 +106,14 @@ const deleteCartItem = (request, response) => {
 
 const deleteSession = (request, response) => {
   //delete local session
+  const id = parseInt(request.params.id)
+  
+    pool.query('DELETE FROM shopping_session WHERE id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`Session deleted with ID: ${id}`)
+    })
 }
 
 module.exports = {
@@ -132,6 +125,5 @@ updateCartItem,
 deleteCartItem,
 getSessionById,
 createSession,
-updateSession,
 deleteSession
 }

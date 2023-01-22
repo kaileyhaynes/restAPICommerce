@@ -109,7 +109,7 @@ const updateOrderDetail = (request, response) => {
 
   pool.query(
       'UPDATE order_details SET user_id = $1, total = $2, payment_id = $3 WHERE id = $4',
-      [user_id, total, payment_id],
+      [user_id, total, payment_id, id],
       (error, results) => {
         if (error) {
           throw error
@@ -125,7 +125,7 @@ const updateOrderItem = (request, response) => {
 
   pool.query(
       'UPDATE order_items SET order_id = $1, product_id = $2, quantity = $3 WHERE id = $4',
-      [order_id, product_id, quantity],
+      [order_id, product_id, quantity, id],
       (error, results) => {
         if (error) {
           throw error
@@ -141,7 +141,7 @@ const updatePaymentDetail = (request, response) => {
 
   pool.query(
       'UPDATE payment_details SET order_id = $1, amount = $2, provider = $3, status = $4 WHERE id = $5',
-      [order_id, amount, provider, status],
+      [order_id, amount, provider, status, id],
       (error, results) => {
         if (error) {
           throw error

@@ -37,7 +37,9 @@ const getUserPayments = (request, response) => {
 }
 
 const getUserPaymentById = (request, response) => {
-  pool.query('SELECT * FROM user_payment FROM id = $1', [id], (error, results) => {
+  const id = parseInt(request.params.id);
+
+  pool.query('SELECT * FROM user_payment WHERE id = $1', [id], (error, results) => {
     if(error) {
       throw error
     }
@@ -56,6 +58,7 @@ const createUserAddress = (request, response) => {
   })
 }
 
+//verify that the account_num is 16 digits long
 const createUserPayment = (request, response) => {
   const { user_id, payment_type, provider, account_num, expire } = request.body;
 
@@ -73,7 +76,7 @@ const updateUserAddress = (request, response) => {
 
   pool.query(
       'UPDATE user_address SET user_id = $1, address_line1 = $2, address_line2 = $3, city = $4, postal_code = $5, country = $6, telephone = $7 WHERE id = $8',
-      [user_id, address_line1, address_line2, city, postal_code, country, telephone],
+      [user_id, address_line1, address_line2, city, postal_code, country, telephone, id],
       (error, results) => {
         if (error) {
           throw error
@@ -88,8 +91,8 @@ const updateUserPayment = (request, response) => {
     const { user_id, payment_type, provider, account_num, expire } = request.body
   
     pool.query(
-        'UPDATE user_payment SET user_id = $1, payment_type = $2, provider = $3, account_num = $4, expire = $5',
-        [user_id, payment_type, provider, account_num, expire],
+        'UPDATE user_payment SET user_id = $1, payment_type = $2, provider = $3, account_num = $4, expire = $5 WHERE id = $6',
+        [user_id, payment_type, provider, account_num, expire, id],
         (error, results) => {
           if (error) {
             throw error
