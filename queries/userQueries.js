@@ -69,17 +69,19 @@ const updateUser = (request, response) => {
     const id = parseInt(request.params.id)
     const { name, email, username, password } = request.body
 
-    pool.query(
-        'UPDATE users SET name = $1, email = $2, username = $3, password = $4 WHERE id = $5',
-        [name, email, username, password],
-        (error, results) => {
+    bcrypt.genSalt(12, (err, salt) => {
+      if (err) throw err;
+      bcrypt.hash(request.body.password, salt, (err, hash) => {
+        if (err) throw err;
+        pool.query('UPDATE users SET name = $1, email = $2, username = $3, password = $4 WHERE id = $5', [name, email, username, hash, id], (error, results) => {
           if (error) {
             throw error
           }
           response.status(200).send(`User modified with ID: ${id}`)
-        }
-      )
-    }
+        });
+      });
+    });
+  }
 
   const deleteUser = (request, response) => {
       const id = parseInt(request.params.id)

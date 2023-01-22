@@ -7,7 +7,7 @@ const pool = new Pool({
   port: 5432,
 })
 
-const getProduct = (request, response) => {
+const getProducts = (request, response) => {
     pool.query('SELECT * FROM product ORDER BY id ASC', (error, results) => {
       if (error) {
         throw error
@@ -55,7 +55,7 @@ const updateProduct = (request, response) => {
 
     pool.query(
         'UPDATE product SET name= $1, descr = $2, price = $3, quantity = $4 WHERE id = $5',
-        [name, descr, price, quantity],
+        [name, descr, price, quantity, id],
         (error, results) => {
           if (error) {
             throw error
@@ -77,7 +77,7 @@ const deleteProduct = (request, response) => {
     }
 
 module.exports = {
-  getProduct,
+  getProducts,
   getProductById,
   createProduct,
   updateProduct,
